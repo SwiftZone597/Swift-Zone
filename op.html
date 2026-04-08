@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swift Zone — Beauty & Lifestyle Store</title>
+rel="stylesheet">
+<style>
+:root{--black:#080808;--surface:#111;--card:#161616;--border:#242424;--border2:#2e2e2e;--white:#f5f5f5;--muted:#666;--muted2:#444;--accent:#ff3c00;--accent-dim:rgba(255,60,0,.12);--gold:#f5b800;--green:#00e676;--red:#ff4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--surface);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+header{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;text-decoration:none;color:var(--white);flex-shrink:0;}
+.logo span{color:var(--accent);}
+.header-search{flex:1;max-width:500px;position:relative;}
+.header-search input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);padding:9px 16px 9px 40px;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.header-search input:focus{border-color:var(--accent);}
+.header-search input::placeholder{color:var(--muted);}
+.header-search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none;}
+.cart-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.cart-btn:hover{background:#e03300;transform:scale(1.03);}
+.cart-count{background:var(--gold);color:#000;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.hero{background:linear-gradient(135deg,#1a0a00,#0d0d0d 60%,#001a0a);border-bottom:1px solid var(--border);padding:28px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,68px);line-height:.95;letter-spacing:2px;}
+.hero-title .acc{color:var(--accent);}
+.hero-sub{color:var(--muted);font-size:13px;margin-top:8px;max-width:320px;line-height:1.6;}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;}
+.badge{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:9px 13px;font-size:12px;line-height:1.4;}
+.badge strong{display:block;color:var(--white);font-size:11px;}
+.badge span{color:var(--muted);font-size:11px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.page{display:flex;min-height:calc(100vh - 60px);}
+.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:18px 14px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.sidebar h3{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--muted);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+.cat-btn{width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:8px 11px;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .15s;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+.cat-btn:hover{background:rgba(255,255,255,.05);color:var(--white);}
+.cat-btn.active{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(255,60,0,.25);}
+.cat-count{font-size:10px;background:var(--border2);color:var(--muted);padding:2px 6px;border-radius:20px;}
+.cat-btn.active .cat-count{background:var(--accent);color:#fff;}
+.side-section{margin-top:18px;}
+.side-section label{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:12px;color:var(--muted);padding:7px 0;user-select:none;}
+.side-section label:hover{color:var(--white);}
+.side-section input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
+.sort-select{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);padding:8px 11px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;cursor:pointer;margin-top:7px;}
+.sort-select option{background:var(--card);}
+.main{flex:1;min-width:0;padding:18px 18px 60px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.results-info{font-size:13px;color:var(--muted);}
+.results-info strong{color:var(--white);}
+.view-toggle{display:flex;gap:4px;}
+.view-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;}
+.view-btn.active,.view-btn:hover{background:var(--accent-dim);color:var(--accent);border-color:rgba(255,60,0,.3);}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:11px;}
+.product-grid.list-view{grid-template-columns:1fr;gap:5px;}
+.product-grid.list-view .product-card{flex-direction:row;align-items:center;padding:11px 15px;gap:14px;}
+.product-grid.list-view .p-emoji{font-size:22px;min-width:32px;}
+.product-grid.list-view .p-info{flex:1;min-width:0;}
+.product-grid.list-view .p-name{font-size:13px;}
+.product-grid.list-view .p-price{font-size:17px;white-space:nowrap;}
+.product-grid.list-view .p-bottom{margin-top:0;}
+.product-grid.list-view .add-btn{width:auto;padding:7px 14px;white-space:nowrap;}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:7px;transition:border-color .2s,transform .2s,box-shadow .2s;animation:fadeUp .35s ease both;position:relative;}
+.product-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,60,0,.07);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.stock-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
+.in-stock{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3);}
+.low-stock{background:rgba(245,184,0,.12);color:var(--gold);border:1px solid rgba(245,184,0,.3);}
+.out-stock{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.25);}
+.p-emoji{font-size:28px;line-height:1;}
+.p-name{font-size:13px;font-weight:600;color:var(--white);line-height:1.3;}
+.p-sku-line{font-size:10px;color:var(--muted2);font-family:monospace;margin-top:2px;}
+.p-price{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--gold);letter-spacing:1px;margin-top:auto;}
+.p-bottom{display:flex;flex-direction:column;gap:5px;}
+.add-btn{width:100%;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:8px;border-radius:7px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;cursor:pointer;transition:all .2s;text-align:center;}
+.add-btn:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:#fff;}
+.add-btn:disabled{opacity:.35;cursor:not-allowed;}
+.add-btn.added{background:var(--green);border-color:var(--green);color:#000;}
+.no-results{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--muted);}
+.no-results .big{font-size:48px;margin-bottom:10px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:199;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.active{opacity:1;pointer-events:all;}
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,100vw);background:#0f0f0f;border-left:1px solid var(--border);z-index:200;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.cart-drawer.open{transform:translateX(0);}
+.drawer-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.drawer-head h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;}
+.close-btn{background:var(--border);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.close-btn:hover{background:var(--accent);}
+.drawer-items{flex:1;overflow-y:auto;padding:12px 18px;display:flex;flex-direction:column;gap:7px;}
+.cart-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 13px;font-size:13px;animation:fadeUp .3s ease;}
+.ci-name{flex:1;font-weight:500;font-size:12px;}
+.ci-price{color:var(--gold);font-weight:600;white-space:nowrap;margin-left:6px;font-size:12px;}
+.ci-remove{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:2px 5px;transition:color .2s;margin-left:3px;}
+.ci-remove:hover{color:var(--accent);}
+.drawer-empty{text-align:center;color:var(--muted);margin-top:60px;font-size:14px;line-height:2.2;}
+.drawer-empty .big{font-size:44px;}
+.drawer-foot{padding:16px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;}
+.drawer-foot .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);}
+.clear-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:9px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;transition:all .2s;}
+.clear-btn:hover{border-color:var(--red);color:var(--red);}
+.wa-btn{width:100%;padding:13px;background:#25d366;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .2s,transform .2s;}
+.wa-btn:hover{background:#1ebe57;transform:scale(1.02);}
+footer{border-top:1px solid var(--border);text-align:center;padding:20px;color:var(--muted);font-size:11px;line-height:2;}
+footer strong{color:var(--accent);}
+@media(max-width:900px){.sidebar{display:none;}.hero{padding:16px;}}
+@media(max-width:600px){header{padding:0 12px;}.header-search{display:none;}.main{padding:12px 10px 60px;}.product-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;}.hero-badges{display:none;}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">Swift<span>Zone</span></a>
+  <div class="header-search"><span class="si">🔍</span><input type="text" id="search" placeholder="Zoek op naam, SKU of code…"></div>
+  <button class="cart-btn" onclick="toggleCart()">🛍️ Mandje <div class="cart-count" id="cart-count">0</div></button>
+</header>
+<div class="hero">
+  <div><div class="hero-title">Swift<span class="acc">Zone</span><br>Store</div><div class="hero-sub">Beauty, parfums, kleding & lifestyle — alles op één plek in Paramaribo.</div></div>
+  <div class="hero-badges">
+    <div class="badge"><div class="live-dot"></div><div><strong>Nu Open</strong><span>Ma–Vr 08:30–18:30</span></div></div>
+    <div class="badge">📍<div><strong>Locatie</strong><span>Leysweg 107, POINT PLAZA ZUID</span></div></div>
+    <div class="badge">📲<div><strong>Delivery</strong><span>5977690140 · POS mogelijk</span></div></div>
+    <div class="badge">🕒<div><strong>Zaterdag</strong><span>10:00–17:00 · Zo gesloten</span></div></div>
+  </div>
+</div>
+<div class="page">
+  <aside class="sidebar">
+    <h3>Categorieën</h3><div id="cat-list"></div>
+    <div class="side-section"><h3 style="margin-top:0">Voorraad</h3><label><input type="checkbox" id="filter-instock"> Alleen op voorraad</label></div>
+    <div class="side-section"><h3 style="margin-top:0">Sorteren</h3><select class="sort-select" id="sort-select"><option value="default">Standaard</option><option value="name-az">Naam A–Z</option><option value="name-za">Naam Z–A</option><option value="price-asc">Prijs laag–hoog</option><option value="price-desc">Prijs hoog–laag</option><option value="stock-desc">Meeste voorraad</option></select></div>
+    <div class="side-section"><h3 style="margin-top:0">Opties</h3><label><input type="checkbox" id="show-sku"> Toon SKU & code</label></div>
+  </aside>
+  <main class="main">
+    <div class="top-bar"><div class="results-info" id="results-info"></div><div class="view-toggle"><button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Grid">⊞</button><button class="view-btn" id="list-btn" onclick="setView('list')" title="Lijst">☰</button></div></div>
+    <div class="product-grid" id="product-container"></div>
+  </main>
+</div>
+<footer><strong>Swift Zone</strong> &nbsp;·&nbsp; POINT PLAZA ZUID — Leysweg 107 (omgeving ADEK) &nbsp;·&nbsp; 📲 5977690140 &nbsp;·&nbsp; Ma–Vr 08:30–18:30 &nbsp;·&nbsp; Za 10:00–17:00</footer>
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="drawer-head"><h3>Winkelmandje</h3><button class="close-btn" onclick="toggleCart()">✕</button></div>
+  <div class="drawer-items" id="drawer-items"></div>
+  <div class="drawer-foot" id="drawer-foot" style="display:none">
+    <div class="row"><span>Artikelen</span><span id="d-count">0</span></div>
+    <button class="clear-btn" onclick="clearCart()">🗑 Leegmaken</button>
+    <button class="wa-btn" onclick="checkout()"><svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.534 5.857L.036 23.902l6.187-1.478A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.001-1.368l-.36-.214-3.714.887.928-3.617-.234-.372A9.818 9.818 0 1 1 12 21.818z"/></svg>Bestellen via WhatsApp</button>
+  </div>
+</div>
+<script>
+const products=[
+{name:"Hand Scrub",sku:"11011",code:"HS21112pcs",cat:"Body & Huid",price:280,stock:6,emoji:"🧴"},
+{name:"Aquavera Intimate Deospray",sku:"107048",code:"699415023685",cat:"Body & Huid",price:120,stock:0,emoji:"🌸"},
+{name:"Aquavera Intimate Wash",sku:"114338",code:"699415020776",cat:"Body & Huid",price:130,stock:4,emoji:"🌸"},
+{name:"Aquavera Love Spring",sku:"150327",code:"453076530668",cat:"Body & Huid",price:140,stock:0,emoji:"💐"},
+{name:"Aquavera Lovely Pink",sku:"150337",code:"453076530651",cat:"Body & Huid",price:140,stock:0,emoji:"🌷"},
+{name:"Aquavera Mystic Oil",sku:"110137",code:"453100307457",cat:"Body & Huid",price:200,stock:0,emoji:"💧"},
+{name:"Avelã Bodylotion",sku:"109007",code:"896235354062",cat:"Body & Huid",price:220,stock:2,emoji:"🧴"},
+{name:"Avelã Olie",sku:"101707",code:"898919411917",cat:"Body & Huid",price:230,stock:3,emoji:"💧"},
+{name:"Bridgerton Bodylotion",sku:"150167",code:"896235354888",cat:"Body & Huid",price:180,stock:1,emoji:"🌹"},
+{name:"Bridgerton Olie",sku:"149327",code:"896235354895",cat:"Body & Huid",price:200,stock:5,emoji:"🌹"},
+{name:"Flor De Baunilha Bodylotion",sku:"146387",code:"896235354079",cat:"Body & Huid",price:220,stock:5,emoji:"🌺"},
+{name:"Flor De Baunilha Olie",sku:"156967",code:"896235354048",cat:"Body & Huid",price:230,stock:6,emoji:"🌺"},
+{name:"Framboesa Negra Body Lotion",sku:"129057",code:"896235354055",cat:"Body & Huid",price:200,stock:5,emoji:"🫐"},
+{name:"Framboesa Negra Body Olie",sku:"180777",code:"896235354031",cat:"Body & Huid",price:210,stock:2,emoji:"🫐"},
+{name:"Irresistível Bodylotion",sku:"112647",code:"8914957",cat:"Body & Huid",price:190,stock:1,emoji:"💜"},
+{name:"Irresistível Olie",sku:"131977",code:"896235354024",cat:"Body & Huid",price:200,stock:0,emoji:"💜"},
+{name:"Tentadora Bodylotion",sku:"184097",code:"8922686",cat:"Body & Huid",price:180,stock:4,emoji:"✨"},
+{name:"Tentadora Olie",sku:"150177",code:"898919411931",cat:"Body & Huid",price:190,stock:3,emoji:"✨"},
+{name:"Tentadora Olie 200ml",sku:"124787",code:"8922693",cat:"Body & Huid",price:210,stock:5,emoji:"✨"},
+{name:"Dove Body Polish Oatmeal",sku:"153200",code:"11111022676",cat:"Body & Huid",price:150,stock:2,emoji:"🌾"},
+{name:"Dove Body Polish Pommegranate",sku:"153210",code:"11111002029",cat:"Body & Huid",price:150,stock:2,emoji:"🍎"},
+{name:"Honey Face & Body Scrub",sku:"179736",code:"921732934712",cat:"Body & Huid",price:180,stock:2,emoji:"🍯"},
+{name:"SZ Face & Body Scrub Cherry",sku:"12625",code:"SZ888",cat:"Body & Huid",price:160,stock:0,emoji:"🍒"},
+{name:"SZ Face & Body Scrub Purple",sku:"12914",code:"SZ555",cat:"Body & Huid",price:160,stock:0,emoji:"💜"},
+{name:"SZ Whitening Face & Body Scrub",sku:"12912",code:"SZ333",cat:"Body & Huid",price:160,stock:0,emoji:"⚪"},
+{name:"SZ Face & Body Scrub Love",sku:"12962",code:"SZ777",cat:"Body & Huid",price:160,stock:0,emoji:"❤️"},
+{name:"Sence Face Scrub",sku:"153228",code:"720701036161",cat:"Body & Huid",price:140,stock:2,emoji:"🌿"},
+{name:"Pond's Clarant Dry Skin",sku:"183208",code:"305210033054",cat:"Body & Huid",price:160,stock:0,emoji:"🌿"},
+{name:"Pond's Clarant Oily Skin",sku:"108170",code:"305210033047",cat:"Body & Huid",price:160,stock:2,emoji:"🌿"},
+{name:"Herbissimo Fresh",sku:"161297",code:"896049528604",cat:"Body & Huid",price:90,stock:0,emoji:"🌿"},
+{name:"Herbissimo Lavanda",sku:"159177",code:"896049528529",cat:"Body & Huid",price:90,stock:5,emoji:"💜"},
+{name:"Herbissimo Sensetive",sku:"180977",code:"896049528567",cat:"Body & Huid",price:90,stock:5,emoji:"🌸"},
+{name:"Herbisssimo Action",sku:"118407",code:"896049528598",cat:"Body & Huid",price:90,stock:0,emoji:"💪"},
+{name:"Herbisssimo Action (2)",sku:"18854",code:"SZHA1",cat:"Body & Huid",price:90,stock:7,emoji:"💪"},
+{name:"23in1 Curl Brush",sku:"18408",code:"SZ2002",cat:"Haar",price:320,stock:4,emoji:"💇"},
+{name:"Amido de Milho Skala",sku:"180987",code:"897042012732",cat:"Haar",price:250,stock:2,emoji:"🌾"},
+{name:"Babosa Skala",sku:"181527",code:"897042005062",cat:"Haar",price:200,stock:2,emoji:"🌵"},
+{name:"Bomba de Vitaminas Skala",sku:"138027",code:"897042012183",cat:"Haar",price:220,stock:2,emoji:"💊"},
+{name:"Mais Cachos Skala",sku:"179817",code:"897042012312",cat:"Haar",price:200,stock:1,emoji:"🌀"},
+{name:"Mais Crespo Skala",sku:"116207",code:"897042008827",cat:"Haar",price:200,stock:1,emoji:"🌀"},
+{name:"Mais Lisos Skala",sku:"120797",code:"897042008407",cat:"Haar",price:200,stock:2,emoji:"🌀"},
+{name:"Coquetel De Frutas Skala",sku:"181537",code:"897042005024",cat:"Haar",price:200,stock:0,emoji:"🍹"},
+{name:"Divino Potinho Skala",sku:"102237",code:"897042007226",cat:"Haar",price:210,stock:2,emoji:"🪄"},
+{name:"Divino Potão Skala",sku:"105897",code:"897042012473",cat:"Haar",price:250,stock:2,emoji:"🪄"},
+{name:"Dona Skala",sku:"169337",code:"897042013180",cat:"Haar",price:200,stock:3,emoji:"👑"},
+{name:"Potao Do Amor Skala",sku:"172097",code:"897042010714",cat:"Haar",price:220,stock:2,emoji:"❤️"},
+{name:"Babasoul Shampoo Kit",sku:"10052",code:"BBS01",cat:"Haar",price:250,stock:0,emoji:"🧴"},
+{name:"Seda Boom Shampoo + Conditioner",sku:"11280",code:"SS01",cat:"Haar",price:180,stock:0,emoji:"🧴"},
+{name:"REVLON Hair Diffuser",sku:"181557",code:"761318004738",cat:"Haar",price:600,stock:1,emoji:"💨"},
+{name:"Curl Defining Brush",sku:"124627",code:"SZ2124",cat:"Haar",price:280,stock:9,emoji:"🪮"},
+{name:"Detangling Brush",sku:"187857",code:"HB1610",cat:"Haar",price:150,stock:3,emoji:"🪮"},
+{name:"Heatless Curls",sku:"148537",code:"SZ0606",cat:"Haar",price:200,stock:4,emoji:"🌀"},
+{name:"SZ Kids Brush",sku:"12739",code:"SZ6376",cat:"Haar",price:120,stock:0,emoji:"🪮"},
+{name:"SZ Flawless Hair Remover",sku:"12750",code:"SZ3107",cat:"Haar",price:160,stock:0,emoji:"✨"},
+{name:"Scalp Massager",sku:"183177",code:"SM1306",cat:"Haar",price:130,stock:8,emoji:"💆"},
+{name:"Edge Brush",sku:"113927",code:"SZ0508",cat:"Haar",price:100,stock:6,emoji:"🖌️"},
+{name:"BABASOUL Bodylotion Watermelon 240ml",sku:"179720",code:"722713014395",cat:"Babasoul",price:190,stock:3,emoji:"🍉"},
+{name:"BABASOUL Face Wash Strawberry",sku:"17976",code:"722713014074",cat:"Babasoul",price:160,stock:0,emoji:"🍓"},
+{name:"BABASOUL Face Wash Tutti Frutti",sku:"11076",code:"722713014067",cat:"Babasoul",price:160,stock:0,emoji:"🍑"},
+{name:"BABASOUL Face Wash Watermelon",sku:"108400",code:"722713014074",cat:"Babasoul",price:160,stock:0,emoji:"🍉"},
+{name:"BABASOUL Lotion Strawberry",sku:"15022",code:"722713014401",cat:"Babasoul",price:150,stock:3,emoji:"🍓"},
+{name:"BABASOUL Lotion Tutti Frutti",sku:"12053",code:"722713014418",cat:"Babasoul",price:150,stock:5,emoji:"🍑"},
+{name:"BABASOUL Intimo Strawberry 200ml",sku:"182497",code:"722713014371",cat:"Babasoul",price:170,stock:4,emoji:"🍓"},
+{name:"BABASOUL Intimo Tutti Frutti 200ml",sku:"12936",code:"722713013923",cat:"Babasoul",price:170,stock:13,emoji:"🍑"},
+{name:"BABASOUL Gel Iogurte de Morango",sku:"125000",code:"722713014692",cat:"Babasoul",price:160,stock:0,emoji:"🍓"},
+{name:"BABASOUL Golden Vanille",sku:"188567",code:"722713014449",cat:"Babasoul",price:200,stock:1,emoji:"🍦"},
+{name:"Babasoul Bodywash Frutas Vermelhas",sku:"164440",code:"722713014890",cat:"Babasoul",price:170,stock:1,emoji:"🫧"},
+{name:"Babasoul Bodywash Tutti Frutti",sku:"113930",code:"722713014869",cat:"Babasoul",price:170,stock:0,emoji:"🫧"},
+{name:"Babasoul Bodywash Watermelon",sku:"111790",code:"722713014906",cat:"Babasoul",price:170,stock:0,emoji:"🫧"},
+{name:"Babasoul Bodylotion Watermelon",sku:"17729",code:"722713014395",cat:"Babasoul",price:190,stock:2,emoji:"🍉"},
+{name:"Banasoul Lotion Flower Lily",sku:"161300",code:"722713014432",cat:"Babasoul",price:200,stock:4,emoji:"🌺"},
+{name:"BABABELL Intimo Melancia",sku:"169317",code:"898751480676",cat:"Babasoul",price:180,stock:5,emoji:"🍉"},
+{name:"BABABELL Gel Morango",sku:"166927",code:"898751481307",cat:"Babasoul",price:175,stock:0,emoji:"🍓"},
+{name:"Ba Ba Soul Frutas Vermelhas",sku:"125950",code:"722713014661",cat:"Babasoul",price:160,stock:0,emoji:"🍒"},
+{name:"Kiss Love Chiclete Gel",sku:"112727",code:"898749591186",cat:"Babasoul",price:160,stock:5,emoji:"🫧"},
+{name:"Kiss Love Tutti Frutti Gel",sku:"166960",code:"631430166488",cat:"Babasoul",price:160,stock:0,emoji:"🫧"},
+{name:"Acqua De Gio M",sku:"179677",code:"752084304832",cat:"Parfum",price:1500,stock:4,emoji:"🌊"},
+{name:"Baccarat Rouge 540 W",sku:"188450",code:"752084309035",cat:"Parfum",price:3500,stock:3,emoji:"💎"},
+{name:"Black Opium W",sku:"172887",code:"752084306652",cat:"Parfum",price:900,stock:1,emoji:"☕"},
+{name:"Bleu De Chanel M",sku:"181747",code:"752084309363",cat:"Parfum",price:1200,stock:2,emoji:"🔵"},
+{name:"Burberry W",sku:"176527",code:"752084309585",cat:"Parfum",price:850,stock:3,emoji:"🎀"},
+{name:"CK1 M",sku:"112697",code:"752084304900",cat:"Parfum",price:700,stock:0,emoji:"⚪"},
+{name:"Coach Floral W",sku:"177357",code:"752084309608",cat:"Parfum",price:850,stock:3,emoji:"🌸"},
+{name:"Coach M",sku:"159387",code:"752084309479",cat:"Parfum",price:800,stock:1,emoji:"🎒"},
+{name:"Cocomademoiselle W",sku:"168537",code:"752084304696",cat:"Parfum",price:1100,stock:4,emoji:"💛"},
+{name:"Cool Water M",sku:"183167",code:"752084309639",cat:"Parfum",price:700,stock:3,emoji:"🌊"},
+{name:"Creed Aventus M",sku:"136027",code:"752084308120",cat:"Parfum",price:2500,stock:4,emoji:"👑"},
+{name:"Dolce+Gabanna M",sku:"183197",code:"752084303958",cat:"Parfum",price:900,stock:2,emoji:"🌺"},
+{name:"Flower Bomb W",sku:"111057",code:"752084304924",cat:"Parfum",price:1100,stock:0,emoji:"💣"},
+{name:"Good Girl Blush W",sku:"188497",code:"752084310994",cat:"Parfum",price:1100,stock:2,emoji:"💗"},
+{name:"Good Girl W",sku:"130707",code:"752084307475",cat:"Parfum",price:1050,stock:4,emoji:"👠"},
+{name:"Gucci Guilty M",sku:"105887",code:"752084305051",cat:"Parfum",price:1000,stock:3,emoji:"🟥"},
+{name:"Hugo M",sku:"180967",code:"752084304030",cat:"Parfum",price:750,stock:3,emoji:"🔵"},
+{name:"I Want Choo W",sku:"184127",code:"752084309592",cat:"Parfum",price:950,stock:3,emoji:"👠"},
+{name:"Invictus M",sku:"180997",code:"752084306591",cat:"Parfum",price:900,stock:4,emoji:"🏆"},
+{name:"Jado're W",sku:"107117",code:"752084301657",cat:"Parfum",price:1100,stock:0,emoji:"💛"},
+{name:"KIM K W",sku:"108187",code:"752084307390",cat:"Parfum",price:800,stock:0,emoji:"⭐"},
+{name:"La Bomba W",sku:"188487",code:"752084310970",cat:"Parfum",price:950,stock:4,emoji:"💣"},
+{name:"Marshmallow Dreams",sku:"188507",code:"752084310611",cat:"Parfum",price:750,stock:4,emoji:"☁️"},
+{name:"Miss Dior W",sku:"130708",code:"752084309356",cat:"Parfum",price:1100,stock:0,emoji:"🌸"},
+{name:"Mont Blanc",sku:"120977",code:"752084305174",cat:"Parfum",price:800,stock:2,emoji:"🏔️"},
+{name:"ONE Million M",sku:"129357",code:"752084304818",cat:"Parfum",price:1000,stock:0,emoji:"🥇"},
+{name:"Paris Hilton W",sku:"165657",code:"752084304078",cat:"Parfum",price:650,stock:3,emoji:"💗"},
+{name:"Pistachio Dreams W",sku:"184037",code:"752084310628",cat:"Parfum",price:780,stock:3,emoji:"🟢"},
+{name:"Polo Red M",sku:"186097",code:"752084309530",cat:"Parfum",price:850,stock:3,emoji:"🔴"},
+{name:"Sauvage Dior M",sku:"186147",code:"752084307482",cat:"Parfum",price:1400,stock:4,emoji:"🌵"},
+{name:"Si Armani W",sku:"126157",code:"752084309332",cat:"Parfum",price:1100,stock:0,emoji:"🌹"},
+{name:"Sol 40 W",sku:"188517",code:"752084310666",cat:"Parfum",price:850,stock:2,emoji:"☀️"},
+{name:"Sol 62",sku:"188527",code:"752084310659",cat:"Parfum",price:900,stock:24,emoji:"☀️"},
+{name:"TERRITOIRE WILD",sku:"181507",code:"752084306683",cat:"Parfum",price:700,stock:6,emoji:"🦁"},
+{name:"Territoire Femme Chic",sku:"181717",code:"752084310420",cat:"Parfum",price:650,stock:4,emoji:"👑"},
+{name:"Territoire Femme Dreams",sku:"183137",code:"752084310406",cat:"Parfum",price:650,stock:1,emoji:"✨"},
+{name:"Territoire Femme Roma",sku:"174597",code:"752084310413",cat:"Parfum",price:650,stock:4,emoji:"🌹"},
+{name:"Territoire Gold",sku:"188577",code:"752084307130",cat:"Parfum",price:700,stock:3,emoji:"🥇"},
+{name:"Territoire Marshmallow Dreams",sku:"188477",code:"752084311007",cat:"Parfum",price:650,stock:2,emoji:"☁️"},
+{name:"Territoire Noir",sku:"123577",code:"752084308878",cat:"Parfum",price:680,stock:4,emoji:"🖤"},
+{name:"Territoire Pistachio Dreams",sku:"188467",code:"752084311014",cat:"Parfum",price:680,stock:4,emoji:"🟢"},
+{name:"Territoire Platinum",sku:"166957",code:"752084305938",cat:"Parfum",price:700,stock:4,emoji:"🥈"},
+{name:"Territoire Pour Homme",sku:"183187",code:"752084303637",cat:"Parfum",price:700,stock:3,emoji:"🧔"},
+{name:"Territoire Privé",sku:"174127",code:"752084308953",cat:"Parfum",price:720,stock:2,emoji:"🔐"},
+{name:"Valentino Donna W",sku:"136417",code:"752084309615",cat:"Parfum",price:1000,stock:0,emoji:"🌹"},
+{name:"Versace W",sku:"156327",code:"752084309059",cat:"Parfum",price:950,stock:1,emoji:"🏛️"},
+{name:"Yara Candy W",sku:"181047",code:"752084310956",cat:"Parfum",price:750,stock:0,emoji:"🍭"},
+{name:"Yara W",sku:"178287",code:"752084310093",cat:"Parfum",price:750,stock:2,emoji:"🌹"},
+{name:"Ysl Libre W",sku:"170257",code:"752084310000",cat:"Parfum",price:1200,stock:4,emoji:"💛"},
+{name:"Oil Parfum D&G Light Blue",sku:"108367",code:"752084305341",cat:"Parfum",price:180,stock:0,emoji:"💙"},
+{name:"Oil Parfum 212 Pour Homme",sku:"108227",code:"752084303842",cat:"Parfum",price:180,stock:0,emoji:"🔵"},
+{name:"Oil Parfum Dakkar",sku:"10822",code:"OP0400",cat:"Parfum",price:180,stock:0,emoji:"🚢"},
+{name:"Oil Parfum Olympea",sku:"111407",code:"OP0959",cat:"Parfum",price:180,stock:0,emoji:"🌊"},
+{name:"SZ Olie Parfum Eternity Men",sku:"40234",code:"4023",cat:"Parfum",price:150,stock:0,emoji:"⏳"},
+{name:"SZ Olie Parfum NYC",sku:"131967",code:"SZ1811",cat:"Parfum",price:150,stock:0,emoji:"🗽"},
+{name:"SZ Olie Parfum Polo Sport",sku:"126187",code:"OP0410",cat:"Parfum",price:150,stock:0,emoji:"🏇"},
+{name:"SZ Olie Parfum Prada Candy",sku:"102187",code:"OP0956",cat:"Parfum",price:150,stock:0,emoji:"🍬"},
+{name:"SZ Olie Parfum Yado're",sku:"116667",code:"OP0165",cat:"Parfum",price:150,stock:0,emoji:"💛"},
+{name:"Parfum Filler 10ml",sku:"107747",code:"SZ9991",cat:"Parfum",price:80,stock:0,emoji:"🧪"},
+{name:"Parfum Filler 5ml",sku:"107767",code:"SZ9990",cat:"Parfum",price:60,stock:0,emoji:"🧪"},
+{name:"Parfum Filler Keychain",sku:"106907",code:"SZ991",cat:"Parfum",price:100,stock:0,emoji:"🔑"},
+{name:"Parfume Holder",sku:"138017",code:"SZ2121",cat:"Parfum",price:120,stock:0,emoji:"🫙"},
+{name:"OIL PERFUME HOLDER",sku:"149397",code:"PO2111",cat:"Parfum",price:100,stock:0,emoji:"🫙"},
+{name:"SZ 212 Pour Homme",sku:"38423",code:"842",cat:"Parfum",price:200,stock:0,emoji:"🔵"},
+{name:"Essence Mascara Swift Zone",sku:"120987",code:"4250947516027",cat:"Make-up",price:120,stock:8,emoji:"👁️"},
+{name:"Eyelash Brush Tube",sku:"158857",code:"MK2111",cat:"Make-up",price:80,stock:9,emoji:"🖌️"},
+{name:"Eyebrow Razor",sku:"187847",code:"ER0831",cat:"Make-up",price:60,stock:19,emoji:"✂️"},
+{name:"Face Mask",sku:"116217",code:"MT0317",cat:"Make-up",price:100,stock:0,emoji:"🫧"},
+{name:"Facial Brush",sku:"155817",code:"CL3113",cat:"Make-up",price:120,stock:0,emoji:"🖌️"},
+{name:"Cartoon Makeup Mirror",sku:"108447",code:"972361740144",cat:"Make-up",price:150,stock:0,emoji:"🪞"},
+{name:"Skincare Headband Set",sku:"120587",code:"SZ2909",cat:"Make-up",price:80,stock:5,emoji:"🎀"},
+{name:"Makeup Essentials Bag",sku:"139217",code:"SZ3004",cat:"Make-up",price:200,stock:4,emoji:"💼"},
+{name:"Makeup Sponges Set",sku:"139357",code:"SZ3005",cat:"Make-up",price:120,stock:4,emoji:"🧽"},
+{name:"Color Sensation Gloss (1)",sku:"148948",code:"8691190704056",cat:"Make-up",price:90,stock:2,emoji:"💋"},
+{name:"Color Sensation Gloss (2)",sku:"148958",code:"8691190704155",cat:"Make-up",price:90,stock:3,emoji:"💋"},
+{name:"Color Sensation Gloss (3)",sku:"148938",code:"8691190704025",cat:"Make-up",price:90,stock:3,emoji:"💋"},
+{name:"GR Crayon 01",sku:"155447",code:"8691190903015",cat:"Make-up",price:70,stock:0,emoji:"✏️"},
+{name:"GR Crayon 05",sku:"149347",code:"8691190903053",cat:"Make-up",price:70,stock:2,emoji:"✏️"},
+{name:"GR Crayon 08",sku:"105877",code:"8691190903084",cat:"Make-up",price:70,stock:0,emoji:"✏️"},
+{name:"GR Crayon 16",sku:"105697",code:"8691190903169",cat:"Make-up",price:70,stock:2,emoji:"✏️"},
+{name:"GR Crayon 21",sku:"161327",code:"8691190903213",cat:"Make-up",price:70,stock:4,emoji:"✏️"},
+{name:"GR Crayon 23",sku:"132547",code:"8691190903237",cat:"Make-up",price:70,stock:3,emoji:"✏️"},
+{name:"GR Juicy Tint 01",sku:"106677",code:"8691190533861",cat:"Make-up",price:80,stock:0,emoji:"💄"},
+{name:"GR Juicy Tint 02",sku:"106317",code:"8691190533878",cat:"Make-up",price:80,stock:0,emoji:"💄"},
+{name:"GR Juicy Tint 03",sku:"106267",code:"8691190533885",cat:"Make-up",price:80,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 04",sku:"105997",code:"8691190856045",cat:"Make-up",price:90,stock:1,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 05",sku:"105627",code:"8691190856052",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 09",sku:"119107",code:"8691190856090",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 15",sku:"156317",code:"8691190856151",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 18",sku:"102667",code:"8691190856182",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 19",sku:"150347",code:"8691190856199",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 22",sku:"105917",code:"8691190856229",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 28",sku:"105967",code:"8691190856281",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 42",sku:"164577",code:"8691190856427",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Longstay Matte Lipstick 47",sku:"102817",code:"8691190856472",cat:"Make-up",price:90,stock:0,emoji:"💄"},
+{name:"GR Magic Kiss",sku:"150367",code:"8691190514549",cat:"Make-up",price:80,stock:0,emoji:"💋"},
+{name:"GR Plumping Gloss 202",sku:"162187",code:"8691190528485",cat:"Make-up",price:90,stock:0,emoji:"💋"},
+{name:"GR Plumping Gloss 204",sku:"105867",code:"8691190528508",cat:"Make-up",price:90,stock:0,emoji:"💋"},
+{name:"GR Plumping Gloss 207",sku:"155457",code:"8691190528539",cat:"Make-up",price:90,stock:0,emoji:"💋"},
+{name:"GR Plumping Gloss 209",sku:"125037",code:"8691190528553",cat:"Make-up",price:90,stock:0,emoji:"💋"},
+{name:"GR Sharpener",sku:"102197",code:"8691190749439",cat:"Make-up",price:40,stock:2,emoji:"✂️"},
+{name:"GR Tinted Lipbalm 01",sku:"150357",code:"8691190440787",cat:"Make-up",price:70,stock:2,emoji:"💋"},
+{name:"GR Tinted Lipbalm 02",sku:"105677",code:"8691190440794",cat:"Make-up",price:70,stock:0,emoji:"💋"},
+{name:"GR Tinted Lipbalm 03",sku:"105667",code:"8691190440800",cat:"Make-up",price:70,stock:0,emoji:"💋"},
+{name:"GR Tinted Lipbalm 04",sku:"105687",code:"8691190440817",cat:"Make-up",price:70,stock:2,emoji:"💋"},
+{name:"Plumping Gloss 201",sku:"149017",code:"8691190528478",cat:"Make-up",price:90,stock:0,emoji:"💋"},
+{name:"Plumping Gloss 205",sku:"148977",code:"8691190528515",cat:"Make-up",price:90,stock:2,emoji:"💋"},
+{name:"Plumping Gloss 206",sku:"148967",code:"8691190528522",cat:"Make-up",price:90,stock:3,emoji:"💋"},
+{name:"Plumping Gloss 212",sku:"148987",code:"8691190528584",cat:"Make-up",price:90,stock:1,emoji:"💋"},
+{name:"Lip Glaze 251",sku:"148927",code:"8691190569792",cat:"Make-up",price:80,stock:2,emoji:"💋"},
+{name:"Lip Glaze 253",sku:"148917",code:"8691190569815",cat:"Make-up",price:80,stock:2,emoji:"💋"},
+{name:"Lip Glaze 254",sku:"148907",code:"8691190569822",cat:"Make-up",price:80,stock:2,emoji:"💋"},
+{name:"Lip Oil 02",sku:"148997",code:"8691190562465",cat:"Make-up",price:90,stock:3,emoji:"💧"},
+{name:"Lip Oil 03",sku:"149007",code:"8691190562472",cat:"Make-up",price:90,stock:3,emoji:"💧"},
+{name:"Clusterlashes Large Tray",sku:"166127",code:"SZ1902",cat:"Wimpers & Nagels",price:180,stock:9,emoji:"👁️"},
+{name:"Clusterlashes ONLY",sku:"102247",code:"SZC09",cat:"Wimpers & Nagels",price:150,stock:0,emoji:"👁️"},
+{name:"Clusterlashes Set",sku:"145047",code:"CL2808",cat:"Wimpers & Nagels",price:220,stock:6,emoji:"👁️"},
+{name:"DIY Cluster Lash Set",sku:"120137",code:"CL0821",cat:"Wimpers & Nagels",price:200,stock:0,emoji:"👁️"},
+{name:"DIY Cluster Lash Set ALL IN",sku:"100087",code:"CL3104",cat:"Wimpers & Nagels",price:250,stock:1,emoji:"👁️"},
+{name:"DIY Cluster Lashes ONLY",sku:"186177",code:"SZ2526",cat:"Wimpers & Nagels",price:160,stock:5,emoji:"👁️"},
+{name:"Fluffy Lashes",sku:"109907",code:"CL1631",cat:"Wimpers & Nagels",price:150,stock:0,emoji:"👁️"},
+{name:"Lash Brush",sku:"132577",code:"LB1628",cat:"Wimpers & Nagels",price:60,stock:32,emoji:"🖌️"},
+{name:"Lash Remover",sku:"131157",code:"LR2131",cat:"Wimpers & Nagels",price:80,stock:0,emoji:"🧴"},
+{name:"Lash Tweezer",sku:"158797",code:"LT1329",cat:"Wimpers & Nagels",price:80,stock:21,emoji:"🔧"},
+{name:"Single Tweezer",sku:"131747",code:"ST1238",cat:"Wimpers & Nagels",price:60,stock:0,emoji:"🔧"},
+{name:"Lash & Eyebrow Growth Serum",sku:"176587",code:"STL01",cat:"Wimpers & Nagels",price:180,stock:0,emoji:"✨"},
+{name:"HANDS Press on Nails",sku:"134017",code:"PO0811",cat:"Wimpers & Nagels",price:120,stock:0,emoji:"💅"},
+{name:"TOES Press on Nails",sku:"126227",code:"PO8119",cat:"Wimpers & Nagels",price:100,stock:0,emoji:"🦶"},
+{name:"Lashes",sku:"149037",code:"sz2502",cat:"Wimpers & Nagels",price:120,stock:5,emoji:"👁️"},
+{name:"BLACK DRESS",sku:"130967",code:"SB2325",cat:"Kleding",price:500,stock:0,emoji:"👗"},
+{name:"BLACK SKIRT JEANS",sku:"130867",code:"9816167189983",cat:"Kleding",price:450,stock:0,emoji:"👖"},
+{name:"BLUE HOODIE",sku:"177397",code:"AJ2020",cat:"Kleding",price:350,stock:2,emoji:"🧥"},
+{name:"BLACK HOODIE",sku:"118997",code:"AJ2018",cat:"Kleding",price:350,stock:3,emoji:"🧥"},
+{name:"BLUE JEANS M",sku:"105737",code:"752084303910",cat:"Kleding",price:400,stock:3,emoji:"👖"},
+{name:"DARK BLUE HOODIE",sku:"120247",code:"AJ2021",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"GREEN HOODIE",sku:"172117",code:"AJ2019",cat:"Kleding",price:350,stock:2,emoji:"🧥"},
+{name:"GREY HOODIE",sku:"177427",code:"AJ1194",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"GREY SET",sku:"120967",code:"SG15",cat:"Kleding",price:500,stock:1,emoji:"👗"},
+{name:"KHAKI HOODIE",sku:"106067",code:"AJ2015",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"KHAKI SET",sku:"124807",code:"SK19",cat:"Kleding",price:500,stock:0,emoji:"👗"},
+{name:"PINK HOODIE",sku:"119157",code:"AJ2016",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"PURPLE HOODIE",sku:"119137",code:"AJ2111",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"RED HOODIE",sku:"144977",code:"AJ1193",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"WHITE HOODIE",sku:"162217",code:"AJ0811",cat:"Kleding",price:350,stock:0,emoji:"🧥"},
+{name:"WHITE SET",sku:"124817",code:"SW19",cat:"Kleding",price:500,stock:0,emoji:"👗"},
+{name:"YELLOW HOODIE",sku:"181877",code:"AJ2400",cat:"Kleding",price:350,stock:2,emoji:"🧥"},
+{name:"PJ Black & Grey",sku:"130997",code:"SZP2210",cat:"Kleding",price:280,stock:1,emoji:"🩳"},
+{name:"STITCH PJ",sku:"182537",code:"6976194810205",cat:"Kleding",price:350,stock:0,emoji:"🩷"},
+{name:"STITCH PJ (2)",sku:"162157",code:"6963417206707",cat:"Kleding",price:350,stock:7,emoji:"🩷"},
+{name:"SLEEP PJ",sku:"128987",code:"69766194810205",cat:"Kleding",price:300,stock:0,emoji:"🛌"},
+{name:"Blouse (1)",sku:"149397",code:"AJ2407",cat:"Kleding",price:280,stock:0,emoji:"👚"},
+{name:"Blouse (2)",sku:"149357",code:"AJ2406",cat:"Kleding",price:280,stock:0,emoji:"👚"},
+{name:"Blouse (3)",sku:"124577",code:"AJ2409",cat:"Kleding",price:280,stock:0,emoji:"👚"},
+{name:"Maxi Dress",sku:"123687",code:"AJ2404",cat:"Kleding",price:450,stock:2,emoji:"👗"},
+{name:"Dress (1)",sku:"100917",code:"SZD01",cat:"Kleding",price:420,stock:6,emoji:"👗"},
+{name:"Dress (2)",sku:"101577",code:"SZD05",cat:"Kleding",price:420,stock:2,emoji:"👗"},
+{name:"Dress (3)",sku:"112787",code:"SZD04",cat:"Kleding",price:420,stock:1,emoji:"👗"},
+{name:"Dress (4)",sku:"100497",code:"SZD03",cat:"Kleding",price:420,stock:7,emoji:"👗"},
+{name:"Dress (5)",sku:"112797",code:"SZD02",cat:"Kleding",price:420,stock:2,emoji:"👗"},
+{name:"Short",sku:"108417",code:"SZS01",cat:"Kleding",price:200,stock:2,emoji:"🩳"},
+{name:"SHORTS",sku:"130987",code:"STS2209",cat:"Kleding",price:220,stock:0,emoji:"🩳"},
+{name:"JEANS SHORT",sku:"109027",code:"GM002",cat:"Kleding",price:320,stock:0,emoji:"🩳"},
+{name:"JEANS TOP",sku:"102167",code:"ST2325",cat:"Kleding",price:280,stock:0,emoji:"👕"},
+{name:"Seamless Bralette",sku:"129067",code:"AJ2411",cat:"Kleding",price:180,stock:0,emoji:"👙"},
+{name:"Bikini's",sku:"124597",code:"AJ2409",cat:"Kleding",price:180,stock:5,emoji:"👙"},
+{name:"Bikini's With Cover Up",sku:"100877",code:"AJ2408",cat:"Kleding",price:200,stock:1,emoji:"👙"},
+{name:"Charge Trackpants",sku:"143547",code:"SZ8302",cat:"Kleding",price:350,stock:0,emoji:"👖"},
+{name:"Charge Tracktop",sku:"143557",code:"SZ6445",cat:"Kleding",price:320,stock:1,emoji:"👕"},
+{name:"City Sweatshorts Black",sku:"145857",code:"SZ8854",cat:"Kleding",price:280,stock:1,emoji:"🩳"},
+{name:"City Sweatshorts Green",sku:"145877",code:"SZ8915",cat:"Kleding",price:280,stock:0,emoji:"🩳"},
+{name:"Taped Initial Trackpants",sku:"143537",code:"SZ8364",cat:"Kleding",price:380,stock:1,emoji:"👖"},
+{name:"Taped Initial Tracktop",sku:"143527",code:"SZ6506",cat:"Kleding",price:350,stock:0,emoji:"👕"},
+{name:"Hex Relax Shorts Brown",sku:"145637",code:"SZ9843",cat:"Kleding",price:260,stock:1,emoji:"🩳"},
+{name:"Mono Relax T-shirt Sand",sku:"137777",code:"SZ5232",cat:"Kleding",price:220,stock:0,emoji:"👕"},
+{name:"Mono Relax T-shirt Black",sku:"137807",code:"SZ6468",cat:"Kleding",price:220,stock:0,emoji:"👕"},
+{name:"Mono Relax T-shirt Navy",sku:"137787",code:"SZ6529",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Signature Tee Black",sku:"141827",code:"SZ0154",cat:"Kleding",price:200,stock:0,emoji:"👕"},
+{name:"Signature Tee Blue",sku:"141847",code:"SZ0215",cat:"Kleding",price:200,stock:0,emoji:"👕"},
+{name:"Signature Tee White",sku:"143517",code:"SZ0277",cat:"Kleding",price:200,stock:0,emoji:"👕"},
+{name:"Initial Tee Black",sku:"140697",code:"SZ7343",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Initial Tee Blue",sku:"141837",code:"SZ6157",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Initial Tee Moss Green",sku:"106117",code:"SZ7404",cat:"Kleding",price:220,stock:0,emoji:"👕"},
+{name:"Initial Tee White",sku:"143497",code:"SZ7466",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Goth Tee M",sku:"143137",code:"SZ6690",cat:"Kleding",price:220,stock:0,emoji:"👕"},
+{name:"Goth Tee S",sku:"143747",code:"SZ6683",cat:"Kleding",price:220,stock:0,emoji:"👕"},
+{name:"LA Black T-shirt S",sku:"110127",code:"SZ04",cat:"Kleding",price:200,stock:0,emoji:"👕"},
+{name:"LA White T-shirt M",sku:"102207",code:"SZ05",cat:"Kleding",price:200,stock:0,emoji:"👕"},
+{name:"LA Black T-shirt M",sku:"120957",code:"SZ07",cat:"Kleding",price:200,stock:1,emoji:"👕"},
+{name:"One Love T-shirt M",sku:"130617",code:"SZ03",cat:"Kleding",price:200,stock:2,emoji:"👕"},
+{name:"Liquid T-shirt",sku:"140387",code:"8721317003349",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Nomad Linen Shirt (1)",sku:"140817",code:"8720836091783",cat:"Kleding",price:350,stock:1,emoji:"👔"},
+{name:"Nomad Linen Shirt (2)",sku:"140907",code:"8720836091790",cat:"Kleding",price:350,stock:1,emoji:"👔"},
+{name:"Nomad Linen Short",sku:"141767",code:"8720836093916",cat:"Kleding",price:300,stock:1,emoji:"🩳"},
+{name:"Desert Race T-shirt (1)",sku:"140327",code:"8720836091479",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Desert Race T-shirt (2)",sku:"140027",code:"8720836091486",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"Force T-shirt",sku:"139917",code:"8720836091417",cat:"Kleding",price:220,stock:1,emoji:"👕"},
+{name:"TIGERPRINT SET",sku:"130977",code:"STS1402",cat:"Kleding",price:480,stock:0,emoji:"🐯"},
+{name:"Monogram Waffle Short",sku:"141217",code:"8720836094494",cat:"Kleding",price:280,stock:1,emoji:"🩳"},
+{name:"Monogram Swimshorts",sku:"140617",code:"8720836094975",cat:"Kleding",price:280,stock:1,emoji:"🩲"},
+{name:"Monogram Plate Slides (1)",sku:"139427",code:"8720836095538",cat:"Kleding",price:300,stock:1,emoji:"👡"},
+{name:"Monogram Plate Slides (2)",sku:"139467",code:"8720836095644",cat:"Kleding",price:300,stock:1,emoji:"👡"},
+{name:"Monogram Slides Green",sku:"139367",code:"8720836095170",cat:"Kleding",price:300,stock:1,emoji:"🥿"},
+{name:"Mono Slides Black 39",sku:"143647",code:"SS3727",cat:"Kleding",price:280,stock:0,emoji:"🥿"},
+{name:"Mono Slides Blue 39",sku:"143657",code:"SZ3963",cat:"Kleding",price:280,stock:0,emoji:"🥿"},
+{name:"Initial Swimshorts Blue",sku:"143607",code:"SZ0085",cat:"Kleding",price:280,stock:1,emoji:"🩲"},
+{name:"Initial Swimshorts Green",sku:"143597",code:"SZ0146",cat:"Kleding",price:280,stock:0,emoji:"🩲"},
+{name:"Golden Heels 39",sku:"143687",code:"SZ6178",cat:"Kleding",price:350,stock:0,emoji:"👠"},
+{name:"Timberland Leather 34",sku:"143667",code:"SZ6072",cat:"Kleding",price:500,stock:1,emoji:"🥾"},
+{name:"Birkenstock",sku:"100457",code:"SZ1774",cat:"Kleding",price:400,stock:0,emoji:"🥿"},
+{name:"Guess Sandal size 7",sku:"120087",code:"GS01",cat:"Kleding",price:450,stock:0,emoji:"👡"},
+{name:"Guess Sandal size 8",sku:"112617",code:"GS02",cat:"Kleding",price:450,stock:0,emoji:"👡"},
+{name:"Sunglasses",sku:"147507",code:"SZ2113",cat:"Kleding",price:150,stock:0,emoji:"🕶️"},
+{name:"Bow Bag",sku:"148517",code:"SZ0404",cat:"Tassen & Acc",price:280,stock:1,emoji:"🎀"},
+{name:"Jewelry Box",sku:"108277",code:"JB5252",cat:"Tassen & Acc",price:200,stock:0,emoji:"💍"},
+{name:"Jewelry Box incl Jewelry (1)",sku:"148497",code:"SZ0405",cat:"Tassen & Acc",price:350,stock:2,emoji:"💍"},
+{name:"Jewelry Box incl Jewelry (2)",sku:"148507",code:"SZ0407",cat:"Tassen & Acc",price:380,stock:1,emoji:"💍"},
+{name:"Monogram Statement Bag Green",sku:"143637",code:"SZ7863",cat:"Tassen & Acc",price:400,stock:1,emoji:"👜"},
+{name:"Tommy Hilfiger Bag Men",sku:"143757",code:"SZ3529",cat:"Tassen & Acc",price:450,stock:0,emoji:"🎒"},
+{name:"Tommy Hilfiger Bag W",sku:"143677",code:"SZ6698",cat:"Tassen & Acc",price:450,stock:1,emoji:"👜"},
+{name:"Initial Shoulder Bag",sku:"139517",code:"8720836078722",cat:"Tassen & Acc",price:380,stock:1,emoji:"👜"},
+{name:"Men Wallet",sku:"180927",code:"SZ1712",cat:"Tassen & Acc",price:180,stock:3,emoji:"👛"},
+{name:"Guess Wallet",sku:"181077",code:"G1902",cat:"Tassen & Acc",price:280,stock:0,emoji:"👛"},
+{name:"Pink Bow Cardholder (1)",sku:"182627",code:"SZ812",cat:"Tassen & Acc",price:100,stock:5,emoji:"🩷"},
+{name:"Pink Bow Cardholder (2)",sku:"139207",code:"SZ3103",cat:"Tassen & Acc",price:100,stock:1,emoji:"🩷"},
+{name:"Pink Bow Wallet",sku:"141777",code:"SZ2903",cat:"Tassen & Acc",price:150,stock:4,emoji:"🩷"},
+{name:"Pink Card Holder",sku:"139187",code:"SZ3003",cat:"Tassen & Acc",price:120,stock:5,emoji:"🩷"},
+{name:"SZ Armband",sku:"121137",code:"DC2403",cat:"Tassen & Acc",price:80,stock:0,emoji:"📿"},
+{name:"Toilet Tas (1)",sku:"158857",code:"SZ1002",cat:"Tassen & Acc",price:150,stock:0,emoji:"🧳"},
+{name:"Toilet Tas (2)",sku:"157657",code:"SZ1001",cat:"Tassen & Acc",price:150,stock:2,emoji:"🧳"},
+{name:"Budget Binder",sku:"141727",code:"SZ1108",cat:"Tassen & Acc",price:200,stock:6,emoji:"📒"},
+{name:"Logo Trucker Cap Black",sku:"139827",code:"8720246860665",cat:"Tassen & Acc",price:200,stock:2,emoji:"🧢"},
+{name:"Monogram Cap Green",sku:"143627",code:"SZ7764",cat:"Tassen & Acc",price:200,stock:0,emoji:"🧢"},
+{name:"Silicone Grip",sku:"180947",code:"SG2810",cat:"Sieraden",price:50,stock:16,emoji:"💍"},
+{name:"Silicone Grip Double Sided",sku:"118667",code:"SG2811",cat:"Sieraden",price:70,stock:2,emoji:"💍"},
+{name:"Letter Initials",sku:"181057",code:"L812",cat:"Sieraden",price:80,stock:24,emoji:"🔤"},
+{name:"Flower Hair Clip (1)",sku:"111497",code:"HC0317",cat:"Haar Acc",price:60,stock:16,emoji:"🌸"},
+{name:"Flower Hair Clip (2)",sku:"108207",code:"HC0929",cat:"Haar Acc",price:60,stock:12,emoji:"🌸"},
+{name:"Flower Hair Clip S",sku:"120627",code:"HCS24",cat:"Haar Acc",price:50,stock:13,emoji:"🌸"},
+{name:"Flowers Hair Clip",sku:"100667",code:"HC2417",cat:"Haar Acc",price:60,stock:0,emoji:"💐"},
+{name:"Hair Bows",sku:"108197",code:"SZ3101",cat:"Haar Acc",price:70,stock:6,emoji:"🎀"},
+{name:"Hair Clip Color M",sku:"143487",code:"SZ2403",cat:"Haar Acc",price:60,stock:1,emoji:"🎀"},
+{name:"Hairclip Set Small",sku:"105857",code:"SZ2412",cat:"Haar Acc",price:80,stock:0,emoji:"🎀"},
+{name:"SZ Hair Clip",sku:"108237",code:"SZ3112",cat:"Haar Acc",price:60,stock:4,emoji:"🎀"},
+{name:"SZ Hair Clip Clear",sku:"129087",code:"SZ1306",cat:"Haar Acc",price:50,stock:0,emoji:"🎀"},
+{name:"SZ Hair Clip Nudes",sku:"129077",code:"SZ0811",cat:"Haar Acc",price:60,stock:0,emoji:"🎀"},
+{name:"SZ Hair Clip Clear Small",sku:"127607",code:"SZ1912",cat:"Haar Acc",price:50,stock:0,emoji:"🎀"},
+{name:"Scrunchie",sku:"112607",code:"SS2403",cat:"Haar Acc",price:50,stock:0,emoji:"🎀"},
+{name:"Scrunchie Set",sku:"136057",code:"SZ02",cat:"Haar Acc",price:80,stock:1,emoji:"🎀"},
+{name:"Scrunchie Keychain",sku:"129597",code:"SK2111",cat:"Haar Acc",price:70,stock:0,emoji:"🔑"},
+{name:"Pink Glitter Tumbler",sku:"136057",code:"ST06",cat:"Tumblers",price:280,stock:0,emoji:"🩷"},
+{name:"Pink Stitch Rhinestone Tumbler",sku:"174067",code:"ST04",cat:"Tumblers",price:300,stock:0,emoji:"🩷"},
+{name:"Purple Glitter Tumbler",sku:"179777",code:"ST05",cat:"Tumblers",price:280,stock:1,emoji:"💜"},
+{name:"White Glitter Tumbler",sku:"176287",code:"ST02",cat:"Tumblers",price:280,stock:1,emoji:"⚪"},
+{name:"RHINESTONE BLACK TUMBLER",sku:"112757",code:"ST01",cat:"Tumblers",price:300,stock:0,emoji:"🖤"},
+{name:"Green Rhinestone Tumbler",sku:"116837",code:"ST03",cat:"Tumblers",price:300,stock:1,emoji:"🟢"},
+{name:"Stitch Tumbler 30oz",sku:"186167",code:"SZ016",cat:"Tumblers",price:320,stock:1,emoji:"💙"},
+{name:"Stitch Tumbler 40oz",sku:"166647",code:"SZ01",cat:"Tumblers",price:360,stock:1,emoji:"💙"},
+{name:"Tumbler 30oz",sku:"119437",code:"SZ927",cat:"Tumblers",price:280,stock:1,emoji:"🥤"},
+{name:"Tumbler 40oz",sku:"143717",code:"SZ2712",cat:"Tumblers",price:320,stock:1,emoji:"🥤"},
+{name:"Tumbler Bouquet SZ",sku:"134497",code:"SZ2112",cat:"Tumblers",price:380,stock:1,emoji:"💐"},
+{name:"Twister Straw",sku:"158877",code:"SZ2912",cat:"Tumblers",price:60,stock:7,emoji:"🥤"},
+{name:"Straw Caps",sku:"177377",code:"SZSTR1",cat:"Tumblers",price:50,stock:10,emoji:"🥤"},
+{name:"Straw Caps Stitch",sku:"120897",code:"SZSTR2",cat:"Tumblers",price:60,stock:9,emoji:"💙"},
+{name:"Cute Straw Caps",sku:"149027",code:"sz0204",cat:"Tumblers",price:50,stock:30,emoji:"🥤"},
+{name:"Glitter Straw",sku:"177367",code:"SZ1201",cat:"Tumblers",price:60,stock:6,emoji:"✨"},
+{name:"Stitch Beach Towel",sku:"124537",code:"ST2808",cat:"Tumblers",price:280,stock:7,emoji:"🏖️"},
+{name:"Stitch Mug",sku:"174107",code:"7031703410202",cat:"Tumblers",price:220,stock:2,emoji:"☕"},
+{name:"Stitch Pillows",sku:"177227",code:"SZ0209",cat:"Stitch",price:280,stock:4,emoji:"🛋️"},
+{name:"Stitch Plushies Keychain",sku:"124827",code:"SZ0109",cat:"Stitch",price:120,stock:2,emoji:"🧸"},
+{name:"Stitch Fluffy Keychain",sku:"100507",code:"SZ0110",cat:"Stitch",price:100,stock:1,emoji:"🔑"},
+{name:"Stitch Fluffy Notebook",sku:"105777",code:"SNB02",cat:"Stitch",price:150,stock:1,emoji:"📓"},
+{name:"Stitch Canvas Bag",sku:"174587",code:"SCB0110",cat:"Stitch",price:200,stock:4,emoji:"🎒"},
+{name:"Stitch Blue Gift Set",sku:"182527",code:"7031703410202",cat:"Stitch",price:450,stock:2,emoji:"🎁"},
+{name:"Stitch Gift Set",sku:"183337",code:"7031703423509",cat:"Stitch",price:500,stock:0,emoji:"🎁"},
+{name:"Stitch Note Book",sku:"158837",code:"3310153025087",cat:"Stitch",price:150,stock:1,emoji:"📓"},
+{name:"Stitch Phone Holder",sku:"120787",code:"SPH5",cat:"Stitch",price:120,stock:1,emoji:"📱"},
+{name:"Stitch Slippers",sku:"148527",code:"SZ3839",cat:"Stitch",price:200,stock:1,emoji:"🥿"},
+{name:"Stitch Blindbox",sku:"150437",code:"6984584878467",cat:"Stitch",price:180,stock:0,emoji:"🎁"},
+{name:"STITCH KEYCHAINS",sku:"156947",code:"SK09",cat:"Stitch",price:80,stock:1,emoji:"🔑"},
+{name:"Sonny Angel Marine",sku:"101827",code:"8658731989488",cat:"Sonny Angel",price:280,stock:3,emoji:"🐚"},
+{name:"Sonny Angel Cherry Blossom",sku:"105597",code:"6974272505102",cat:"Sonny Angel",price:280,stock:4,emoji:"🌸"},
+{name:"Sonny Angel Dreaming",sku:"153747",code:"6678562989372",cat:"Sonny Angel",price:280,stock:3,emoji:"💤"},
+{name:"Sonny Angel I Love Rainy Day",sku:"107807",code:"6978050251656",cat:"Sonny Angel",price:280,stock:3,emoji:"🌧️"},
+{name:"Sonny Angel Looking Back",sku:"129327",code:"6484512242716",cat:"Sonny Angel",price:280,stock:1,emoji:"👀"},
+{name:"Sonny Angel Sweets",sku:"184047",code:"6658330880645",cat:"Sonny Angel",price:280,stock:4,emoji:"🍬"},
+{name:'LABUBU "BIG INTO ENERGY"',sku:"188437",code:"6931571071929",cat:"LABUBU",price:800,stock:6,emoji:"👾"},
+{name:'LABUBU "Boutique Doll"',sku:"176557",code:"6978298780031",cat:"LABUBU",price:850,stock:3,emoji:"👾"},
+{name:'LABUBU "Coca Cola"',sku:"113807",code:"6985868748582",cat:"LABUBU",price:900,stock:0,emoji:"🥤"},
+{name:'LABUBU "Have A Seat"',sku:"113947",code:"6941848255204",cat:"LABUBU",price:800,stock:6,emoji:"🪑"},
+{name:"Christal Rose Bouquet",sku:"120867",code:"SZ2601",cat:"Cadeau",price:350,stock:2,emoji:"🌹"},
+{name:"Eternal Rose Flower",sku:"181707",code:"SZ716",cat:"Cadeau",price:280,stock:0,emoji:"🌹"},
+{name:"Valentine Gift Set",sku:"174567",code:"SZ1517",cat:"Cadeau",price:500,stock:2,emoji:"❤️"},
+{name:"Mother's Day Gift Bag",sku:"102227",code:"SZ06",cat:"Cadeau",price:300,stock:1,emoji:"💐"},
+{name:"Rose Balloon",sku:"166917",code:"SZ1402",cat:"Cadeau",price:180,stock:3,emoji:"🎈"},
+{name:"Gift (1)",sku:"176387",code:"sz1102",cat:"Cadeau",price:250,stock:1,emoji:"🎁"},
+{name:"Gift (2)",sku:"153177",code:"SZ0440",cat:"Cadeau",price:300,stock:3,emoji:"🎁"},
+{name:"Christmas Package (1)",sku:"177337",code:"SZ1516",cat:"Cadeau",price:400,stock:0,emoji:"🎄"},
+{name:"Christmas Package (2)",sku:"176357",code:"SZ1514",cat:"Cadeau",price:400,stock:0,emoji:"🎄"},
+{name:"Christmas Package (3)",sku:"176367",code:"SZ1512",cat:"Cadeau",price:380,stock:0,emoji:"🎄"},
+{name:"Christmas Package (4)",sku:"176377",code:"SZ1513",cat:"Cadeau",price:380,stock:0,emoji:"🎄"},
+{name:"Floral Dream Candle",sku:"181667",code:"SZ712",cat:"Kaarsen",price:180,stock:0,emoji:"🕯️"},
+{name:"Lavender Vanilla Candle",sku:"181687",code:"SZ714",cat:"Kaarsen",price:180,stock:0,emoji:"🕯️"},
+{name:"Strawberry Field Candle",sku:"181677",code:"SZ713",cat:"Kaarsen",price:180,stock:0,emoji:"🕯️"},
+{name:"Spring Rain",sku:"181697",code:"SZ715",cat:"Kaarsen",price:180,stock:0,emoji:"🌧️"},
+{name:"Bond & Seal",sku:"181607",code:"BS3124",cat:"Diversen",price:80,stock:24,emoji:"🔧"},
+{name:"Blood Pressure Monitor",sku:"181608",code:"6937358700976",cat:"Diversen",price:800,stock:2,emoji:"❤️‍🩹"},
+{name:"Notebook Set",sku:"172127",code:"709996935470",cat:"Diversen",price:150,stock:3,emoji:"📓"},
+{name:"SZ Earbuds",sku:"126237",code:"SZ1324",cat:"Diversen",price:250,stock:0,emoji:"🎧"},
+{name:"Stickers",sku:"148887",code:"SZ3104",cat:"Diversen",price:30,stock:143,emoji:"⭐"},
+{name:"Motivational Stickers",sku:"155477",code:"AJ2405",cat:"Diversen",price:40,stock:5,emoji:"⭐"},
+{name:"Meow People",sku:"120707",code:"6975308870911",cat:"Diversen",price:120,stock:2,emoji:"🐱"},
+];
+
+let cart=[],currentCat=“Alles”,currentSort=“default”,onlyInStock=false,showSku=false,viewMode=“grid”,searchQuery=””;
+const cats=[“Alles”,…new Set(products.map(p=>p.cat))];
+
+function buildCats(){
+const el=document.getElementById(‘cat-list’);el.innerHTML=””;
+cats.forEach(cat=>{
+const count=cat===“Alles”?products.length:products.filter(p=>p.cat===cat).length;
+const btn=document.createElement(‘button’);btn.className=“cat-btn”+(cat===currentCat?” active”:””);
+btn.innerHTML=`${cat}<span class="cat-count">${count}</span>`;
+btn.onclick=()=>{currentCat=cat;buildCats();render();};el.appendChild(btn);
+});
+}
+
+function stockBadge(s){
+if(s<=0)return`<span class="stock-badge out-stock">Uitverkocht</span>`;
+if(s<=3)return`<span class="stock-badge low-stock">Bijna op (${s})</span>`;
+return`<span class="stock-badge in-stock">Op voorraad</span>`;
+}
+
+function getFiltered(){
+let list=[…products];
+if(currentCat!==“Alles”)list=list.filter(p=>p.cat===currentCat);
+if(onlyInStock)list=list.filter(p=>p.stock>0);
+if(searchQuery)list=list.filter(p=>p.name.toLowerCase().includes(searchQuery)||(p.sku&&p.sku.toLowerCase().includes(searchQuery))||(p.code&&p.code.toLowerCase().includes(searchQuery)));
+if(currentSort===“name-az”)list.sort((a,b)=>a.name.localeCompare(b.name));
+else if(currentSort===“name-za”)list.sort((a,b)=>b.name.localeCompare(a.name));
+else if(currentSort===“price-asc”)list.sort((a,b)=>a.price-b.price);
+else if(currentSort===“price-desc”)list.sort((a,b)=>b.price-a.price);
+else if(currentSort===“stock-desc”)list.sort((a,b)=>b.stock-a.stock);
+return list;
+}
+
+let filteredCache=[];
+function render(){
+filteredCache=getFiltered();
+const container=document.getElementById(‘product-container’);
+document.getElementById(‘results-info’).innerHTML=`<strong>${filteredCache.length}</strong> product${filteredCache.length!==1?"en":""}`;
+container.innerHTML=””;
+if(filteredCache.length===0){container.innerHTML=`<div class="no-results"><div class="big">🔍</div><p>Geen producten gevonden.</p></div>`;return;}
+filteredCache.forEach((p,i)=>{
+const card=document.createElement(‘div’);card.className=“product-card”;
+card.style.animationDelay=Math.min(i*.018,.5)+“s”;
+const out=p.stock<=0;
+card.innerHTML=`${stockBadge(p.stock)}<div class="p-emoji">${p.emoji||"🛍️"}</div><div class="p-info"><div class="p-name">${p.name}</div>${showSku?`<div class="p-sku-line">SKU: ${p.sku} · ${p.code}</div>`:""}</div><div class="p-price">SRD ${p.price.toLocaleString('nl-NL')}</div><div class="p-bottom"><button class="add-btn" onclick="addToCart(${i},this)" ${out?"disabled":""}>${out?"Uitverkocht":"+ Voeg toe"}</button></div>`;
+container.appendChild(card);
+});
+}
+
+function addToCart(idx,btn){
+cart.push(filteredCache[idx]);
+document.getElementById(‘cart-count’).textContent=cart.length;
+btn.textContent=“✓ Toegevoegd!”;btn.classList.add(“added”);
+setTimeout(()=>{btn.textContent=”+ Voeg toe”;btn.classList.remove(“added”);},1400);
+}
+function removeFromCart(i){cart.splice(i,1);document.getElementById(‘cart-count’).textContent=cart.length;renderDrawer();}
+function clearCart(){if(!confirm(“Mandje leegmaken?”))return;cart=[];document.getElementById(‘cart-count’).textContent=0;renderDrawer();}
+
+function renderDrawer(){
+const el=document.getElementById(‘drawer-items’),foot=document.getElementById(‘drawer-foot’);
+if(cart.length===0){el.innerHTML=`<div class="drawer-empty"><div class="big">🛒</div>Je mandje is leeg.</div>`;foot.style.display=“none”;return;}
+foot.style.display=“flex”;document.getElementById(‘d-count’).textContent=cart.length;el.innerHTML=””;
+cart.forEach((p,i)=>{
+const div=document.createElement(‘div’);div.className=“cart-item”;
+div.innerHTML=`<span>${p.emoji||"🛍️"}</span><span class="ci-name">${p.name}</span><span class="ci-price">SRD ${p.price.toLocaleString('nl-NL')}</span><button class="ci-remove" onclick="removeFromCart(${i})">✕</button>`;
+el.appendChild(div);
+});
+}
+
+function toggleCart(){
+const d=document.getElementById(‘cart-drawer’),o=document.getElementById(‘overlay’);
+if(!d.classList.contains(‘open’))renderDrawer();
+d.classList.toggle(‘open’);o.classList.toggle(‘active’);
+}
+
+function checkout(){
+if(cart.length===0){alert(“Mandje is leeg.”);return;}
+let msg=“🛍️ Hallo Swift Zone! Ik wil graag bestellen:\n\n”;
+cart.forEach(p=>msg+=`• ${p.name} (${p.code}) — SRD ${p.price.toLocaleString('nl-NL')}\n`);
+msg+=”\nKunnen jullie mij helpen? 😊”;
+window.open(`https://wa.me/5977690140?text=${encodeURIComponent(msg)}`,’_blank’);
+}
+
+function setView(v){
+viewMode=v;
+document.getElementById(‘product-container’).classList.toggle(‘list-view’,v===‘list’);
+document.getElementById(‘grid-btn’).classList.toggle(‘active’,v===‘grid’);
+document.getElementById(‘list-btn’).classList.toggle(‘active’,v===‘list’);
+}
+
+document.getElementById(‘search’).addEventListener(‘input’,e=>{searchQuery=e.target.value.toLowerCase().trim();render();});
+document.getElementById(‘filter-instock’).addEventListener(‘change’,e=>{onlyInStock=e.target.checked;render();});
+document.getElementById(‘sort-select’).addEventListener(‘change’,e=>{currentSort=e.target.value;render();});
+document.getElementById(‘show-sku’).addEventListener(‘change’,e=>{showSku=e.target.checked;render();});
+buildCats();render();
+</script>
+
+</body>
+</html>
